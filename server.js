@@ -10,12 +10,14 @@ const PORT = process.env.PORT || 5000;
 const collectDefaultMetrics = client.collectDefaultMetrics;
 collectDefaultMetrics({ timeout: 5000 });
 
-app.use(cors());
+app.use(cors({
+  origin: "https://activity-app11.netlify.app",
+  methods: ["GET", "POST", "PUT", "DELETE"],
+}));
 app.use(express.json());
-app.use(express.static('.'));   // serves index.html etc.
 
 // -------- MongoDB Connection --------
-const MONGO_URL = "mongodb+srv://taskuser:abcd1234@cluster0.rf1bwtm.mongodb.net/productivity?retryWrites=true&w=majority";
+const MONGO_URL = process.env.MONGO_URL;
 
 mongoose.connect(MONGO_URL)
   .then(() => console.log("MongoDB connected"))
@@ -117,3 +119,4 @@ app.get("/metrics", async (req, res) => {
 
 // -------- Start Server --------
 app.listen(PORT, () => console.log("Backend running on port", PORT));
+
